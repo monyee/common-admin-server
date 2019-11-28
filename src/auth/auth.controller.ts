@@ -9,4 +9,11 @@ export class AuthController {
   login (@Request() req) {
     return req.user
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('/userinfo')
+  userInfo (@Request() req) {
+    return req.user
+  }
+
 }

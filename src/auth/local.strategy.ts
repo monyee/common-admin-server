@@ -10,7 +10,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   /**
-   * passport-local 默认请求的参数挂在req对象上 req.username req.password， 也可以指定其他变量名
+   * passport-local 默认请求的参数username password， 也可以指定其他变量名
    * @param username 
    * @param password 
    */
@@ -19,6 +19,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
-    return user;
+
+    // Passport 将基于 validate() 方法的返回值构建一个user 对象，并将其作为属性附加到
+    return user
   }
+  
 }
