@@ -1,6 +1,6 @@
 import { UsersService } from './../users/users.service';
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/users/model/user';
+import { User } from './../users/model/user.model';
 import {JwtService} from '@nestjs/jwt'
 
 @Injectable()
@@ -20,9 +20,12 @@ export class AuthService {
     return null
   }
 
-  async login (user:any) {
-    
-    const payload = {user: user.username, sub: user.userId}
+  /**
+   * 生存token
+   * @param user 
+   */
+  async createToken (user:User) {
+    const payload = {email: user.email, name: user.uname}
     return {
       access_token: this.jwtService.sign(payload) //生成jwt签名
     }

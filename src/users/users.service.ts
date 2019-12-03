@@ -1,5 +1,6 @@
-import { User } from './model/user';
+import { User, UserModel } from './model/user.model';
 import { Injectable } from '@nestjs/common';
+import { DocumentType } from '@typegoose/typegoose';
 
 @Injectable()
 export class UsersService {
@@ -9,34 +10,41 @@ export class UsersService {
   constructor () {
     this.users = [
       {
-        name: 'randy',
-        uid: '1123444',
-        skey: '1111',
+        uname: 'randy',
         email: 'zdgg@qq.com',
         pwd: '123'
       },
       {
-        name: 'monyee',
-        uid: '1123444',
-        skey: '1111',
+        uname: 'monyee',
         email: 'zdgg@qq.com',
         pwd: '123'
       },
       {
-        name: 'jack',
-        uid: '1123444',
-        skey: '1111',
+        uname: 'jack',
         email: 'zdgg@qq.com',
         pwd: '123'
       }
     ]
   }
 
+  async add (user:User):Promise<any> {
+    const rs = UserModel.create(user, (err, res) => {
+      
+      console.log(7777777, err, res)
+    }).then(res=>{
+      console.log(8888, res)
+    }).catch(e=>{
+      console.log(99999999, e)
+    })
+console.log(66666, rs)
+    return rs
+  }
+
   async findAll ():Promise<User[]> {
     return this.users || []
   }
 
-  async findOne (name: string):Promise<User|undefined> {
-    return this.users.find(u => u.name === name)
+  async findOne (uname: string):Promise<User|undefined> {
+    return this.users.find(u => u.uname === uname)
   }
 }
