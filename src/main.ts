@@ -1,3 +1,4 @@
+import { ValidationPipe } from './pipes/validation.pipe';
 import { ConfigService } from './config/config.service';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -10,7 +11,7 @@ import { UserModel } from './users/model/user.model';
 
 
 async function bootstrap() {
-  
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // set mvc recipe
@@ -34,21 +35,21 @@ async function bootstrap() {
     maxAge: 60 * 60 * 1000 // 1h
   }))
 
+  // 拉取配置
   let configService = app.get(ConfigService)
-  
-    mongoose.connect(configService.get('DB_HOST'), {
-      authSource: 'admin', // 当前账户授权依赖的数据库必填
-      useNewUrlParser: true, // 启用新的url方式 一些兼容性处理 避免warning
-      useUnifiedTopology: true,
-      useFindAndModify: false, // false可以以使findOneAndUpdate()和findOneAndRemove()
-      useCreateIndex: true, // 进行自动索引构建
-    }
-    )
-  
-    // const rs = await UserModel.create({ name: 'JohnDoe' } ); // an "as" assertion, to have types for all properties
-    // // const user = await UserModel.findById(id).exec();
-  
-    // console.log(99999, rs); // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
+
+  // mongoose数据库连接
+  mongoose.connect(configService.get('DB_HOST'), {
+    authSource: 'admin', // 当前账户授权依赖的数据库必填
+    useNewUrlParser: true, // 启用新的url方式 一些兼容性处理 避免warning
+    useUnifiedTopology: true,
+    useFindAndModify: false, // false可以以使findOneAndUpdate()和findOneAndRemove()
+    useCreateIndex: true, // 进行自动索引构建
+  }
+  )
+
+  // 全局验证管道
+  app.useGlobalPipes(new ValidationPipe())
 
   await app.listen(3000);
 }
